@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "210162502581",
+    "firebase_url": "https://cafe-sederhana-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "cafe-sederhana",
+    "storage_bucket": "cafe-sederhana.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:210162502581:android:47e0b99e330bdb756d67fc",
+        "android_client_info": {
+          "package_name": "com.example.cafe_sederhana"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "210162502581-46r7vvod3dd95vs7fqlv0583tqe6ie7k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxMb2LfyHfwoYKhtxeewSzMG4icdL1L50"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "210162502581-46r7vvod3dd95vs7fqlv0583tqe6ie7k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
