@@ -1,16 +1,23 @@
+import 'package:cafe_sederhana/models/model_customer.dart';
+import 'package:cafe_sederhana/providers/provider_customer.dart';
+import 'package:cafe_sederhana/providers/provider_makanan.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class Pesanan extends StatefulWidget {
-  const Pesanan({super.key});
+class ScreenPesanan extends StatefulWidget {
+  const ScreenPesanan({super.key});
 
   @override
-  State<Pesanan> createState() => _PesananState();
+  State<ScreenPesanan> createState() => _PesananState();
 }
 
-class _PesananState extends State<Pesanan> {
+class _PesananState extends State<ScreenPesanan> {
   final stl1 = const TextStyle(fontSize: 16, color: Colors.black);
   @override
   Widget build(BuildContext context) {
+    final chart = Provider.of<ProviderMakanan>(context, listen: false).list;
+    // final user = Provider.of<ProviderCustomer>(context).users;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pesanan'),
@@ -31,7 +38,7 @@ class _PesananState extends State<Pesanan> {
                       style: stl1,
                     ),
                     Text(
-                      ' Ahmad',
+                      'Ahmad',
                       style: stl1,
                     ),
                   ],
@@ -50,6 +57,20 @@ class _PesananState extends State<Pesanan> {
                 ),
               ],
             ),
+          ),
+          Column(
+            children: [
+              Text('Daftar Pesanan'),
+              // ListView.builder(
+              //   itemCount: chart.length,
+              //   itemBuilder: (context, index) {
+              //     return ListTile(
+              //       title: Text(chart[index].name),
+              //     );
+              //   },
+              // ),
+              for (var i in chart) Text(i.name)
+            ],
           ),
         ],
       ),
