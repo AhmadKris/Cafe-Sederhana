@@ -1,3 +1,6 @@
+import 'package:cafe_sederhana/screens/screen_cemilan.dart';
+import 'package:cafe_sederhana/screens/screen_makanan.dart';
+import 'package:cafe_sederhana/screens/screen_minuman.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -33,7 +36,11 @@ class _MenuState extends State<Menu> {
             ),
           ]),
         ),
-        body: const TabBarView(children: []),
+        body: const TabBarView(children: [
+          ScreenMakanan(),
+          ScreenMinuman(),
+          ScreenCemilan(),
+        ]),
       ),
     );
   }
