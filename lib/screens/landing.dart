@@ -2,6 +2,7 @@ import 'package:cafe_sederhana/models/model_customer.dart';
 import 'package:cafe_sederhana/providers/provider_customer.dart';
 import 'package:cafe_sederhana/screens/screens.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 // import 'package:provider/provider.dart';
 
 class Landing extends StatelessWidget {
@@ -83,8 +84,10 @@ class Landing extends StatelessWidget {
                           addCustomer();
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => const Screens(),
+                            PageTransition(
+                              duration: const Duration(milliseconds: 500),
+                              type: PageTransitionType.fade,
+                              child: const Screens(),
                             ),
                           );
                         },
