@@ -30,6 +30,13 @@
             {
               "client_id": "210162502581-46r7vvod3dd95vs7fqlv0583tqe6ie7k.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "210162502581-0na7d8a65npb1q8s8j7ng34g01skti0s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.cafeSederhana"
+              }
             }
           ]
         }
