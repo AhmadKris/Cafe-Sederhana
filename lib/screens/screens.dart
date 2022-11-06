@@ -1,6 +1,6 @@
 import 'package:cafe_sederhana/screens/menu.dart';
 import 'package:cafe_sederhana/screens/screen_pesanan.dart';
-import 'package:cafe_sederhana/screens/tagihan.dart';
+import 'package:cafe_sederhana/screens/screen_tagihan.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 

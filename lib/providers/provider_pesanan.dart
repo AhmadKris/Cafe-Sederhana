@@ -1,22 +1,31 @@
+import 'dart:convert';
+
 import 'package:cafe_sederhana/models/model_pesanan.dart';
+import 'package:cafe_sederhana/services/service_pesanan.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 
 class ProviderPesanan with ChangeNotifier {
-  List<ModelPesanan> _list = [];
+  final DatabaseReference _customer =
+      FirebaseDatabase.instance.ref().child('pesanan/');
 
-  // ProviderMakanan() {
-  //   _serviceMakanan = ServiceMakanan();
-  //   _fetchDataFoods();
-  // }
+  void saveOrder(m) {
+    _customer.push().set(m);
 
-  // void _fetchDataFoods() async {
-  //   _list = await _serviceMakanan.getAllFoods();
-  // }
-
-  List<ModelPesanan> get list => [..._list];
-  void addItem(ModelPesanan pesanan) {
-    print(pesanan);
-    _list.add(pesanan);
-    notifyListeners();
+    // print(customer.name);
   }
+
+  // late ServicePesanan _servicePesanan;
+  // List<ModelPesanan> _list = [];
+
+  // ProviderPesanan() {
+  //   _servicePesanan = ServicePesanan();
+  //   _fetchData();
+  // }
+
+  // void _fetchData() async {
+  //   _list = await _servicePesanan.getData();
+  // }
+
+  // List<ModelPesanan> get listPesanan => [..._list];
 }

@@ -3,15 +3,29 @@ import 'package:cafe_sederhana/providers/provider_customer.dart';
 import 'package:cafe_sederhana/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:provider/provider.dart';
 
-class Landing extends StatelessWidget {
+class Landing extends StatefulWidget {
   const Landing({super.key});
 
+  @override
+  State<Landing> createState() => _LandingState();
+}
+
+class _LandingState extends State<Landing> {
   @override
   Widget build(BuildContext context) {
     TextEditingController nameController = TextEditingController();
     TextEditingController numberController = TextEditingController();
+    final _formKey = GlobalKey<FormState>();
+
+    // late SharedPreferences share;
+
+    void shared() async {
+      final share = await SharedPreferences.getInstance();
+      share.setString('username', nameController.text);
+    }
 
     void addCustomer() {
       final data = ModelCustomer(
@@ -39,6 +53,7 @@ class Landing extends StatelessWidget {
                 ),
               ),
               Form(
+                key: _formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,12 +67,12 @@ class Landing extends StatelessWidget {
                         label: Text('Nama'),
                       ),
                       controller: nameController,
-                      // validator: (value) {
-                      //   if (value!.isEmpty) {
-                      //     return 'Silahkan Tusliskan Nama Lengkap Anda';
-                      //   }
-                      //   return null;
-                      // },
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Silahkan Tusliskan Nama Anda';
+                        }
+                        return null;
+                      },
                     ),
                     TextFormField(
                       keyboardType: TextInputType.number,
@@ -68,12 +83,15 @@ class Landing extends StatelessWidget {
                         label: Text('Nomor Meja'),
                       ),
                       controller: numberController,
-                      // validator: (value) {
-                      //   if (value!.isEmpty) {
-                      //     return 'Silahkan Tusliskan Nama Lengkap Anda';
-                      //   }
-                      //   return null;
-                      // },
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Silahkan Tulis Nomor Meja Anda';
+                        } else if (int.parse(value) < 0 ||
+                            int.parse(value) > 20) {
+                          return 'Masukkan Nomor Meja Yang Benar';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(
                       height: 30,
@@ -81,15 +99,18 @@ class Landing extends StatelessWidget {
                     Center(
                       child: ElevatedButton(
                         onPressed: () {
-                          addCustomer();
-                          Navigator.push(
-                            context,
-                            PageTransition(
-                              duration: const Duration(milliseconds: 500),
-                              type: PageTransitionType.fade,
-                              child: const Screens(),
-                            ),
-                          );
+                          if (_formKey.currentState!.validate()) {
+                            addCustomer();
+                            shared();
+                            Navigator.push(
+                              context,
+                              PageTransition(
+                                duration: const Duration(milliseconds: 500),
+                                type: PageTransitionType.fade,
+                                child: const Screens(),
+                              ),
+                            );
+                          }
                         },
                         child: const Text(
                           'Lanjut',
