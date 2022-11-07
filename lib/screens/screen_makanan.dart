@@ -1,9 +1,4 @@
-import 'package:cafe_sederhana/models/model_pesanan.dart';
 import 'package:cafe_sederhana/providers/provider_makanan.dart';
-import 'package:cafe_sederhana/providers/provider_pesanan.dart';
-// import 'package:cafe_sederhana/providers/provider_pesanan.dart';
-// import 'package:cafe_sederhana/services/service_makanan.dart';
-// import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -22,8 +17,6 @@ class _MakananState extends State<ScreenMakanan> {
   @override
   Widget build(BuildContext context) {
     final foods = Provider.of<ProviderMakanan>(context).list;
-
-    // final data = Provider.of<ProviderMakanan>(context).pesan;
 
     return Padding(
       padding: const EdgeInsets.all(8.0),

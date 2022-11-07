@@ -24,7 +24,10 @@ class _LandingState extends State<Landing> {
 
     void shared() async {
       final share = await SharedPreferences.getInstance();
-      share.setString('username', nameController.text);
+      setState(() {
+        share.setString('username', nameController.text);
+        share.setString('num', numberController.text);
+      });
     }
 
     void addCustomer() {

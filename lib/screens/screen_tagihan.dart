@@ -16,11 +16,13 @@ class Tagihan extends StatefulWidget {
 class _TagihanState extends State<Tagihan> {
   // late SharedPreferences share;
   String username = '';
+  String num = '';
 
   void getShare() async {
     final share = await SharedPreferences.getInstance();
     setState(() {
       username = share.getString('username') ?? '';
+      num = share.getString('num') ?? '';
     });
   }
 
@@ -87,7 +89,8 @@ class _TagihanState extends State<Tagihan> {
                       style: stl1,
                     ),
                     Text(
-                      user.last.number,
+                      // user.last.number,
+                      num,
                       style: stl1,
                     ),
                   ],
