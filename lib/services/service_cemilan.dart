@@ -12,7 +12,7 @@ class ServiceCemilan {
 
   Future<List<ModelCemilan>> getAllSnacks() async {
     final res = await _dio.get(url);
-    print(res);
+    // print(res);
 
     if (res.data != null) {
       return List<ModelCemilan>.from(

@@ -12,13 +12,14 @@ class ServiceMinuman {
 
   Future<List<ModelMinuman>> getAllDrinks() async {
     final res = await _dio.get(url);
-    print(res);
+    // print(res);
 
     if (res.data != null) {
       return List<ModelMinuman>.from(
         res.data.map((e) => ModelMinuman.fromJson(e)).toList(),
       );
     }
+
     return [];
   }
 }

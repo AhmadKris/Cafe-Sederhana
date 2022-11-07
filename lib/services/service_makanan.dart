@@ -4,15 +4,15 @@ import 'package:dio/dio.dart';
 class ServiceMakanan {
   late Dio _dio;
   final url =
-      "https://cafe-sederhana-default-rtdb.asia-southeast1.firebasedatabase.app/makanan.json";
+      "https://cafe-sederhana-default-rtdb.asia-southeast1.firebasedatabase.app";
 
   ServiceMakanan() {
     _dio = Dio();
   }
 
   Future<List<ModelMakanan>> getAllFoods() async {
-    final response = await _dio.get(url);
-    print(response);
+    final response = await _dio.get('$url/makanan.json');
+    // print(response);
 
     if (response.data != null) {
       return List<ModelMakanan>.from(
@@ -20,5 +20,10 @@ class ServiceMakanan {
       );
     }
     return [];
+  }
+
+  void postFood(ModelMakanan makanan) async {
+    final res = await _dio.post('$url/pesanan.json', data: makanan.toJson());
+    print(res);
   }
 }
