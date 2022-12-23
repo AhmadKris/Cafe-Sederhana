@@ -1,4 +1,6 @@
-import 'package:cafe_sederhana/providers/provider_cemilan.dart';
+import 'package:cafe_sederhana/models/model_pesanan.dart';
+import 'package:cafe_sederhana/providers/menu_provider.dart';
+import 'package:cafe_sederhana/providers/provider_pesanan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,8 +16,7 @@ class ScreenCemilan extends StatefulWidget {
 class _CemilanState extends State<ScreenCemilan> {
   @override
   Widget build(BuildContext context) {
-    final snacks = Provider.of<ProviderCemilan>(context).list;
-    // print(snacks);
+    final snacks = Provider.of<MenuProvider>(context).cemilan;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GridView.builder(
@@ -36,8 +37,13 @@ class _CemilanState extends State<ScreenCemilan> {
                 child: FadeInAnimation(
                   child: InkWell(
                     onTap: () {
-                      Provider.of<ProviderCemilan>(context, listen: false)
-                          .addCemilan(snacks[index]);
+                      Provider.of<ProviderPesanan>(context, listen: false)
+                          .tambahPesanan(DaftarPesanan(
+                        nama: snacks[index].nama,
+                        kategori: snacks[index].kategori,
+                        harga: snacks[index].harga,
+                        jumlah: 1,
+                      ));
                     },
                     child: Column(
                       children: [
@@ -46,12 +52,13 @@ class _CemilanState extends State<ScreenCemilan> {
                             width: 150,
                             child: Image(
                               fit: BoxFit.cover,
-                              image: NetworkImage(snacks[index].image),
+                              image:
+                                  NetworkImage(snacks[index].gambar.toString()),
                             ),
                           ),
                         ),
-                        Text(snacks[index].name),
-                        Text("Rp. ${snacks[index].price}"),
+                        Text(snacks[index].nama.toString()),
+                        Text("Rp. ${snacks[index].harga}"),
                         // ignore: deprecated_member_use
                         const FaIcon(FontAwesomeIcons.shoppingCart),
                       ],

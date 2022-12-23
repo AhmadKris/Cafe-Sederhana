@@ -1,10 +1,11 @@
 import 'package:cafe_sederhana/models/model_customer.dart';
+import 'package:cafe_sederhana/providers/menu_provider.dart';
 import 'package:cafe_sederhana/providers/provider_customer.dart';
 import 'package:cafe_sederhana/screens/screens.dart';
+import 'package:cafe_sederhana/utils/finite_state.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
 
 class Landing extends StatefulWidget {
   const Landing({super.key});
@@ -15,29 +16,37 @@ class Landing extends StatefulWidget {
 
 class _LandingState extends State<Landing> {
   @override
+  void initState() {
+    Future.delayed(Duration.zero, () {
+      Provider.of<MenuProvider>(context, listen: false).fetchMenu();
+    });
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     TextEditingController nameController = TextEditingController();
     TextEditingController numberController = TextEditingController();
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
 
     // late SharedPreferences share;
 
-    void shared() async {
-      final share = await SharedPreferences.getInstance();
-      setState(() {
-        share.setString('username', nameController.text);
-        share.setString('num', numberController.text);
-      });
-    }
+    // void shared() async {
+    //   final share = await SharedPreferences.getInstance();
+    //   setState(() {
+    //     share.setString('username', nameController.text);
+    //     share.setString('num', numberController.text);
+    //   });
+    // }
 
-    void addCustomer() {
-      final data = ModelCustomer(
-        name: nameController.text,
-        number: numberController.text,
-      );
-      ProviderCustomer().saveCustomer(data);
-      // customer.saveCustomer(data);
-    }
+    // void addCustomer() {
+    //   final data = ModelCustomer(
+    //     name: nameController.text,
+    //     number: numberController.text,
+    //   );
+
+    // }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -56,7 +65,7 @@ class _LandingState extends State<Landing> {
                 ),
               ),
               Form(
-                key: _formKey,
+                key: formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,9 +111,13 @@ class _LandingState extends State<Landing> {
                     Center(
                       child: ElevatedButton(
                         onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            addCustomer();
-                            shared();
+                          if (formKey.currentState!.validate()) {
+                            formKey.currentState!.save();
+                            Provider.of<ProviderCustomer>(context,
+                                    listen: false)
+                                .addUser(ModelCustomer(
+                                    name: nameController.text,
+                                    number: numberController.text));
                             Navigator.push(
                               context,
                               PageTransition(
@@ -115,9 +128,18 @@ class _LandingState extends State<Landing> {
                             );
                           }
                         },
-                        child: const Text(
-                          'Lanjut',
-                          style: TextStyle(fontSize: 20),
+                        child: Consumer<ProviderCustomer>(
+                          builder: (context, masuk, circularProgressIndicator) {
+                            if (masuk.myState == MyState.loading) {
+                              return circularProgressIndicator!;
+                            } else {
+                              return const Text(
+                                'Lanjut',
+                                style: TextStyle(fontSize: 20),
+                              );
+                            }
+                          },
+                          child: const CircularProgressIndicator(),
                         ),
                       ),
                     ),

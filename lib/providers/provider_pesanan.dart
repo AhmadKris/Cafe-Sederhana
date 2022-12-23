@@ -1,27 +1,63 @@
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cafe_sederhana/models/model_pesanan.dart';
+import 'package:cafe_sederhana/services/service_pesanan.dart';
+import 'package:cafe_sederhana/utils/finite_state.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
-class ProviderPesanan with ChangeNotifier {
-  final DatabaseReference _customer =
-      FirebaseDatabase.instance.ref().child('pesanan/');
+class ProviderPesanan extends ChangeNotifier {
+  final ServicePesanan _servicePesanan = ServicePesanan();
+  PesananModel? pesanan;
 
-  void saveOrder(m) {
-    _customer.push().set(m);
+  MyState myState = MyState.initial;
+  Future buatPesanan(PesananModel data) async {
+    myState = MyState.loading;
+    notifyListeners();
 
-    // print(customer.name);
+    try {
+      await _servicePesanan.postPesanan(data);
+
+      myState = MyState.loaded;
+      notifyListeners();
+    } catch (e) {
+      if (e is DioError) {
+        e.response!.statusCode;
+      }
+      myState = MyState.failed;
+      notifyListeners();
+    }
   }
 
-  // late ServicePesanan _servicePesanan;
-  // List<ModelPesanan> _list = [];
+  List<DaftarPesanan> data = [];
+  List<DaftarPesanan> get daftar => [...data];
 
-  // ProviderPesanan() {
-  //   _servicePesanan = ServicePesanan();
-  //   _fetchData();
-  // }
+  void tambahPesanan(DaftarPesanan item) {
+    data.add(item);
+    myState = MyState.loaded;
+    notifyListeners();
+  }
 
-  // void _fetchData() async {
-  //   _list = await _servicePesanan.getData();
-  // }
+  void hapusPesanan(index) {
+    data.remove(index);
+    myState = MyState.loaded;
+    notifyListeners();
+  }
 
-  // List<ModelPesanan> get listPesanan => [..._list];
+  MyState myState2 = MyState.initial;
+  Future ambilPesanan() async {
+    myState2 = MyState.loading;
+    notifyListeners();
+
+    try {
+      pesanan = await _servicePesanan.getPesanan();
+
+      myState2 = MyState.loaded;
+      notifyListeners();
+    } catch (e) {
+      if (e is DioError) {
+        e.response!.statusCode;
+      }
+      myState2 = MyState.failed;
+      notifyListeners();
+    }
+  }
 }

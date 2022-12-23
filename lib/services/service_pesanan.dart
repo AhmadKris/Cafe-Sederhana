@@ -1,47 +1,34 @@
 import 'package:cafe_sederhana/models/model_pesanan.dart';
+import 'package:cafe_sederhana/utils/urls.dart';
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ServicePesanan {
-  late Dio _dio;
-  final url =
-      "https://cafe-sederhana-default-rtdb.asia-southeast1.firebasedatabase.app";
+  final Dio _dio = Dio();
 
-  ServicePesanan() {
-    _dio = Dio();
+  Future postPesanan(PesananModel data) async {
+    SharedPreferences? prefs = await SharedPreferences.getInstance();
+    try {
+      final response =
+          await _dio.post(Urls.baseUrl + Urls.pesanan, data: data.toJson());
+      await prefs.setString("id_pesanan", response.data['name']);
+
+      return response;
+    } on DioError catch (_) {
+      rethrow;
+    }
   }
 
-  // Future<List<ModelPesanan>> getData() async {
-  //   List<ModelPesanan> order = [];
-  //   final response = await _dio.get('$url/pesanan.json');
-  //   print(response);
-  //   final extractedData = response.data as Map<String, dynamic>;
-  //   if (extractedData.isEmpty) {
-  //     return [];
-  //   }
-  //   extractedData.forEach((key, value) {
-  //     order.add(
-  //       ModelPesanan(
-  //         id: key,
-  //         name: value['customer'],
-  //         number: value['nomor meja'],
-  //       ),
-  //     );
-  //   });
-  //   return order;
-  // }
+  Future<PesananModel> getPesanan() async {
+    SharedPreferences? prefs = await SharedPreferences.getInstance();
+    String id;
+    id = prefs.getString("id_pesanan").toString();
+    try {
+      final response = await _dio.get('${Urls.baseUrl}/pesanan/$id.json');
 
-  // Future<List<ModelPesanan>> getDataItems() async {
-  //   List<ModelPesanan> order = [];
-  //   final response = await _dio.get('$url/pesanan/items.json');
-  //   print(response);
-  //   final extractedData = response.data as Map<String, dynamic>;
-  //   if (extractedData.isEmpty) {
-  //     return [];
-  //   }
-  //   extractedData.forEach((key, value) {
-  //     order.add(ModelPesanan(
-  //         id: key, name: value['nama'], number: value['nomor meja'], item: []));
-  //   });
-  //   return order;
-  // }
+      return PesananModel.fromJson(response.data);
+    } on DioError catch (_) {
+      rethrow;
+    }
+  }
 }
