@@ -1,4 +1,6 @@
-import 'package:cafe_sederhana/providers/provider_minuman.dart';
+import 'package:cafe_sederhana/models/model_pesanan.dart';
+import 'package:cafe_sederhana/providers/menu_provider.dart';
+import 'package:cafe_sederhana/providers/provider_pesanan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,7 +16,8 @@ class ScreenMinuman extends StatefulWidget {
 class _MinumanState extends State<ScreenMinuman> {
   @override
   Widget build(BuildContext context) {
-    final drinks = Provider.of<ProviderMinuman>(context).list;
+    // final drinks = Provider.of<ProviderMinuman>(context).list;
+    final drinks = Provider.of<MenuProvider>(context).minuman;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GridView.builder(
@@ -35,8 +38,13 @@ class _MinumanState extends State<ScreenMinuman> {
                 child: FadeInAnimation(
                   child: InkWell(
                     onTap: () {
-                      Provider.of<ProviderMinuman>(context, listen: false)
-                          .addMinuman(drinks[index]);
+                      Provider.of<ProviderPesanan>(context, listen: false)
+                          .tambahPesanan(DaftarPesanan(
+                        nama: drinks[index].nama,
+                        kategori: drinks[index].kategori,
+                        harga: drinks[index].harga,
+                        jumlah: 1,
+                      ));
                     },
                     child: Column(
                       children: [
@@ -45,12 +53,13 @@ class _MinumanState extends State<ScreenMinuman> {
                             width: 150,
                             child: Image(
                               fit: BoxFit.cover,
-                              image: NetworkImage(drinks[index].image),
+                              image:
+                                  NetworkImage(drinks[index].gambar.toString()),
                             ),
                           ),
                         ),
-                        Text(drinks[index].name),
-                        Text("Rp. ${drinks[index].price}"),
+                        Text(drinks[index].nama.toString()),
+                        Text("Rp. ${drinks[index].harga}"),
                         // ignore: deprecated_member_use
                         const FaIcon(FontAwesomeIcons.shoppingCart),
                       ],

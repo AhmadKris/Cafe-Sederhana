@@ -1,7 +1,5 @@
-import 'package:cafe_sederhana/providers/provider_cemilan.dart';
+import 'package:cafe_sederhana/providers/menu_provider.dart';
 import 'package:cafe_sederhana/providers/provider_customer.dart';
-import 'package:cafe_sederhana/providers/provider_makanan.dart';
-import 'package:cafe_sederhana/providers/provider_minuman.dart';
 import 'package:cafe_sederhana/providers/provider_pesanan.dart';
 import 'package:cafe_sederhana/screens/landing.dart';
 import 'package:flutter/material.dart';
@@ -15,19 +13,13 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => ProviderMinuman(),
+          create: (_) => ProviderPesanan(),
         ),
         ChangeNotifierProvider(
-          create: (_) => ProviderMakanan(),
+          create: (_) => MenuProvider(),
         ),
         ChangeNotifierProvider(
           create: (_) => ProviderCustomer(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => ProviderCemilan(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => ProviderPesanan(),
         ),
       ],
       child: const MyApp(),

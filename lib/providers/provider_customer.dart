@@ -1,39 +1,47 @@
 import 'package:cafe_sederhana/models/model_customer.dart';
 import 'package:cafe_sederhana/services/service_customer.dart';
-// import 'package:cafe_sederhana/services/service_customer.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cafe_sederhana/utils/finite_state.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
-class ProviderCustomer with ChangeNotifier {
-  final DatabaseReference _customer =
-      FirebaseDatabase.instance.ref().child('customer');
+class ProviderCustomer extends ChangeNotifier {
+  final ServiceCustomer _serviceCustomer = ServiceCustomer();
+  ModelCustomer? usr;
+  ModelCustomer? user;
 
-  void saveCustomer(ModelCustomer customer) {
-    _customer.push().set(customer.toJson());
-    // print(customer.name);
+  MyState myState = MyState.initial;
+  Future addUser(ModelCustomer data) async {
+    myState = MyState.loading;
+    notifyListeners();
+    try {
+      usr = await _serviceCustomer.postUser(data);
+
+      myState = MyState.loaded;
+      notifyListeners();
+    } catch (e) {
+      if (e is DioError) {
+        e.response!.statusCode;
+      }
+      myState = MyState.failed;
+      notifyListeners();
+    }
   }
 
-  late ServiceCustomer _serviceCustomer;
-  List<ModelCustomer> _users = [];
+  MyState myState2 = MyState.initial;
+  Future getUser() async {
+    myState2 = MyState.loading;
+    notifyListeners();
+    try {
+      user = await _serviceCustomer.getUser();
 
-  List<ModelCustomer> get user => [..._users];
-
-  ProviderCustomer() {
-    _serviceCustomer = ServiceCustomer();
-    _fetchDataUsers();
-  }
-
-  void _fetchDataUsers() async {
-    _users = await _serviceCustomer.getCustomer();
+      myState2 = MyState.loaded;
+      notifyListeners();
+    } catch (e) {
+      if (e is DioError) {
+        e.response!.statusCode;
+      }
+      myState2 = MyState.failed;
+      notifyListeners();
+    }
   }
 }
-
-  
-
-//   late ServiceCustomer _serviceCustomer;
-//   List<ModelCustomer> _users = [];
-
-  
-
-//   List<ModelCustomer> get users => [..._users];
-

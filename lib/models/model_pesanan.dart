@@ -1,33 +1,53 @@
-import 'package:cafe_sederhana/models/model_items.dart';
+class PesananModel {
+  String? namaCustomer;
+  String? nomorMeja;
+  List<DaftarPesanan>? daftarPesanan;
 
-class ModelPesanan {
-  String? id;
-  String name;
-  String number;
-  List<Items>? item;
+  PesananModel({this.namaCustomer, this.nomorMeja, this.daftarPesanan});
 
-  ModelPesanan({
-    this.id,
-    required this.name,
-    required this.number,
-    this.item,
-  });
+  PesananModel.fromJson(Map<String, dynamic> json) {
+    namaCustomer = json['nama_customer'];
+    nomorMeja = json['nomor_meja'];
+    if (json['daftar_pesanan'] != null) {
+      daftarPesanan = <DaftarPesanan>[];
+      json['daftar_pesanan'].forEach((v) {
+        daftarPesanan!.add(DaftarPesanan.fromJson(v));
+      });
+    }
+  }
 
-  factory ModelPesanan.fromJson(Map<String, dynamic> json) => ModelPesanan(
-        id: json["key"],
-        name: json["customer"],
-        number: json["nomor meja"],
-        // item: json["item"] == null
-        //     ? []
-        //     : Items.toOrderItemList(
-        //         json['items'],
-        //       ),
-      );
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['nama_customer'] = namaCustomer;
+    data['nomor_meja'] = nomorMeja;
+    if (daftarPesanan != null) {
+      data['daftar_pesanan'] = daftarPesanan!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
 
-  // Map<dynamic, dynamic> toJson() => <dynamic, dynamic>{
-  //       'id': id,
-  //       'nama': name,
-  //       'nomor meja': number,
-  //       'item': item,
-  //     };
+class DaftarPesanan {
+  int? harga;
+  int? jumlah;
+  String? kategori;
+  String? nama;
+
+  DaftarPesanan({this.harga, this.jumlah, this.kategori, this.nama});
+
+  DaftarPesanan.fromJson(Map<String, dynamic> json) {
+    harga = json['harga'];
+    jumlah = json['jumlah'];
+    kategori = json['kategori'];
+    nama = json['nama'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['harga'] = harga;
+    data['jumlah'] = jumlah;
+    data['kategori'] = kategori;
+    data['nama'] = nama;
+    return data;
+  }
 }
